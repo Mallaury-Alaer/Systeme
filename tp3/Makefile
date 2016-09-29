@@ -1,0 +1,8 @@
+CC = gcc
+CFLAGS = -Wall -Werror -W
+
+tp3: tp3_main.o tp3.o tp3_3.o tp3_5.o tp3_6.o
+	$(CC) -o $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $^

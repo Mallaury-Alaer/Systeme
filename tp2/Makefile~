@@ -1,0 +1,14 @@
+CC = gcc
+CFLAGS = -Wall -Werror -W
+
+tp2: tp2_main.o tp2_1.o tp2_2.o
+	$(CC) -o $@ $^
+
+tp2_main.o: tp2_main.c
+	$(CC) $(CFLAGS) -c $^
+
+tp2_1.o: tp2_1.c
+	$(CC) $(CFLAGS) -c $^ 
+
+tp2_2.o: tp2_2.c
+	$(CC) $(CFLAGS) -c $^ 

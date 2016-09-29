@@ -1,0 +1,2 @@
+int mon_strlen1(char s[]);
+int mon_strlen(const char *s);

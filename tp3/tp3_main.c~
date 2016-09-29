@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include "tp3.h"
+#include "tp3_3.h"
+#include "tp3_5.h"
+#include "tp3_6.h"
+
+int main(void)
+{
+  char chaine[50]="abcde";
+  char chaine2[]="fghij";
+  const char *a = chaine;
+  const char *b = chaine2;
+
+  printf("Taille chaine abcde: %d \n", mon_strlen(a));
+  printf("Comparaison abcde et fghij : %d \n", mon_strcmp(a, b));
+  printf("Comparaison chaines identiques : %d \n", mon_strcmp(a, a));
+  printf("Comparaison 3 premiers caracteres: %d \n", mon_strncmp(a,b,3));
+
+  char *c = chaine;
+
+  printf("Concatenation abcde et fghij: %s \n", mon_strcat(c, b));
+
+	 printf("Recherche caractere %s \n", mon_strchr(c, 'c'));
+
+  return 0;
+}
