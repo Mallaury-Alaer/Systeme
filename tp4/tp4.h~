@@ -1,0 +1,1 @@
+char * miroir (const char *s);
