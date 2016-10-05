@@ -7,7 +7,7 @@ char * miroir (const char *s)
 {
   int t = strlen(s)-1;
   s = s+t;
-  char *s1 = malloc(t);
+  char *s1 = malloc(t+2);
 
   if(s1 == NULL)
     {
@@ -21,6 +21,6 @@ char * miroir (const char *s)
       s--;
     }
 
-  *(s1+t)='\0';
+  *(s1+t+1)='\0';
   return (s1-t)-1;
 }

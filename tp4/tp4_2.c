@@ -5,7 +5,7 @@
 
 char * saisie()
 {
-  char *c = malloc(0);
+  char *c = malloc(1);
   char sai = 'z';
   int i=0;
 
@@ -14,9 +14,8 @@ char * saisie()
       sai=getchar();
       *(c+i)=sai;
       i++;
-      c=realloc(c,i);
+      c=realloc(c,i+1);
     }
-
   *(c+i)='\0';
   return c;
 }
