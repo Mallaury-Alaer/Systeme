@@ -1,0 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "tp5.h"
+
+int traiter (int f, int *car, int *mot, int *lig)
+{
+  
+}
