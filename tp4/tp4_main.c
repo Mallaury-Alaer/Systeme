@@ -14,56 +14,75 @@ int main(int argc, char * argv[])
      printf("Saisie : %s \n", saisie());
   */
 
-  int i=0;
+  char optstring[]="ms";
+  int inc=0;
   int m=0;
-  int s=0;
-  int a=0;
+  int sopt=0;
+  int c;
+  char *s;
+  char *sai;
+  char *mir;
 
-  for(i=1; i<argc; i++)
+  while( (c=getopt(argc, argv, optstring)) != EOF)
     {
-      if(strchr(argv[i],'-') != NULL && strchr(argv[i],'m') != NULL)
+      if(((char) c == 'm' && !m) || ((char) c == 's' && !sopt))
 	{
-	  m=1;
-	}
-      if(strchr(argv[i],'-') != NULL && strchr(argv[i],'s') != NULL)
-	{
-	  s=1;
-	}
-      if(strchr(argv[i],'-') == NULL && a==0)
-	{
-	  a=i;
-	}
-      
-    }
-  
-  if(m==1 && s==0)//Si seulement m est present
-    {
-      if(a != 0)
-	{
-	  printf("Miroir: %s \n", miroir(argv[a]));
+	  if((char) c == 'm')
+	    {
+	      m=1;
+	    }
+	  else
+	    {
+	      sopt=1;
+	    }
 	}
       else
 	{
-	  printf("Mauvaise utilisation. \n");
+	  inc = 1;
 	}
     }
-  else if(m==0 && s==1)//Si seulement s est present
+  
+  if(!inc)
     {
-      printf("Saisir une chaine: \n");
-      printf("Saisie: %s \n",saisie());
-    }
-  else if(m==1 && s==1)//Si les deux sont presents
-    {
-      printf("Saisir une chaine: \n");
-      char *chaine = saisie();
-      printf("%s \n",miroir(chaine)); 
+      if(m && sopt)
+	{
+	  printf("Saisir une chaine: ");
+	  sai = saisie();
+	  mir = miroir(sai);
+	  printf("Miroir : %s \n",mir);
+	  free(sai);
+	  free(mir);
+	}
+      else
+	{
+	  if(m)
+	    {
+	      s = argv[optind];
+	      if(s == '\0')
+		{
+		  printf("Mauvaise utilisation. \n");
+		}
+	      else
+		{
+		  mir = miroir(s);
+		  printf("Miroir : %s \n",mir);
+		  free(mir);
+		}
+	    }
+	  if(sopt)
+	    {
+	      printf("Saisir une chaine: ");
+	      sai = saisie();
+	      printf("Saisie : %s \n", sai);
+	      free(sai);
+	    }
+	}
     }
   else
     {
-      printf("Mauvaise utilisation. \n");
+      printf("Mauvaise utilisation.");
     }
-      
-  
 
-    return 0;
+  
+  return 0;
 }

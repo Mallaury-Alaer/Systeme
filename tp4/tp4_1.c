@@ -4,10 +4,10 @@
 #include "tp4.h"
 
 char * miroir (const char *s)
-{
-  int t = strlen(s)-1;
+{/*
+  int t = strlen(s)+1;
   s = s+t;
-  char *s1 = malloc(t+2);
+  char *s1 = malloc(t+1);
 
   if(s1 == NULL)
     {
@@ -22,5 +22,21 @@ char * miroir (const char *s)
     }
 
   *(s1+t+1)='\0';
-  return (s1-t)-1;
+  return (s1-t-1);
+ */
+
+  char *res;
+  int i = strlen(s);
+  int j;
+  res = malloc(sizeof(char)*(i+1));
+  if(res==NULL)
+    {
+      return NULL;
+    }
+  for (j = 0; j<i; j++)
+    {
+      res[j] = s[i-(j+1)];
+    }
+  res[i]='\0';
+  return res;
 }
