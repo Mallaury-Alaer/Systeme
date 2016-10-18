@@ -1,0 +1,7 @@
+CC = gcc
+CFLAGS = -Wall -W -Werror
+
+$^ = tp1_2.h tp1_3.h
+$@ = tp1_1.c tp1_2.c tp1_3.c
+
+$(CC) $(CFLAGS) -o tp1 $@ 

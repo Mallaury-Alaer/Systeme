@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int fonction_a(int param)
+{
+  return 42 + param;
+}
+
+void fonction_b(int param)
+{
+  if (param == 0)
+    printf("Le parametre est nul\n");
+  else
+    printf("Le retour de la fonction_a est %d\n", fonction_a(param));
+}
+
+int main(void)
+{
+  fonction_b(10);
+  fonction_a(20);
+  return 0;
+}
