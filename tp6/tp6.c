@@ -51,7 +51,7 @@ int ecrire_deux_octets(int fd, uint16 *val)
  return(write(fd, val, 2));
 }
 
-int ecrire_quatre_octets(int fd, unint32 *val)
+int ecrire_quatre_octets(int fd, uint32 *val)
 {
   if(fd == -1) return -1;
   return(write(fd, val, 4)); 
@@ -59,5 +59,5 @@ int ecrire_quatre_octets(int fd, unint32 *val)
 
 int ecrire_entete(int vers, entete_bmp *entete)
 {
-  
+
 }
