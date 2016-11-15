@@ -37,4 +37,5 @@ int ecrire_deux_octets(int fd, uint16 *val);
 int ecrire_quatre_octets(int fd, uint32 *val);
 int ecrire_entete(int vers, entete_bmp *entete);
 int verifier_entete(entete_bmp *entete);
+unsigned char* allouer_pixels(entete_bmp *entete);
 

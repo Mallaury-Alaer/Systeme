@@ -83,10 +83,18 @@ int ecrire_entete(int vers, entete_bmp *entete)
   return 0;
 }
 
-/*
+
 int verifier_entete(entete_bmp *entete)
+{
+  if(entete->bitmap.profondeur == 24) return 1;
+  perror("Erreur : profondeur != 24");
+  return 0;
+}
+/*
+unsigned char* allouer_pixels(entete_bmp *entete)
 {
 
 }
 */
+
 
