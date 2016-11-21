@@ -90,11 +90,11 @@ int verifier_entete(entete_bmp *entete)
   perror("Erreur : profondeur != 24");
   return 0;
 }
-/*
+
 unsigned char* allouer_pixels(entete_bmp *entete)
 {
-
+  
 }
-*/
+
 
 

@@ -17,7 +17,6 @@ int main(void)
     perror("Erreur lecture entete");
     return -1;
   }
-  
 //test Exercice 1
   printf("Lecture entete : \n");
   // Lecture entete fichier
