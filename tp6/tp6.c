@@ -86,15 +86,106 @@ int ecrire_entete(int vers, entete_bmp *entete)
 
 int verifier_entete(entete_bmp *entete)
 {
-  if(entete->bitmap.profondeur == 24) return 1;
+  if(entete->bitmap.profondeur == 24) 
+    return 1;
   perror("Erreur : profondeur != 24");
   return 0;
 }
 
 unsigned char* allouer_pixels(entete_bmp *entete)
 {
-  
+  return malloc((entete->bitmap.largeur * entete->bitmap.hauteur * 3));
+}
+
+int lire_pixels(int de, entete_bmp *entete, unsigned char *pixels)
+{
+  return read(de, pixels, entete->bitmap.largeur * entete->bitmap.hauteur * 3);
+}
+
+int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels)
+{
+  return write(vers, pixels, entete->bitmap.largeur * entete->bitmap.hauteur * 3);
 }
 
 
+int copier_bmp(int de, int vers)
+{
+  entete_bmp entete;
+  unsigned char *pixels;
+  /* lecture du fichier source */
+  lire_entete(de, &entete);
+  pixels = allouer_pixels(&entete);
+  lire_pixels(de, &entete, pixels);
+  /* écriture du fichier destination */
+  ecrire_entete(vers, &entete);
+  ecrire_pixels(vers, &entete, pixels);
+  /* on libère les pixels */
+  free(pixels);
+  return 1; /* on a réussi */
+}
 
+void rouge(entete_bmp *entete, unsigned char *pixels)
+{
+  int largeur = entete->bitmap.largeur * 3;
+  int hauteur = entete->bitmap.hauteur;
+  int padding = 4 - largeur % 4;
+  int y;
+  int x;
+  for (y = 0; y < hauteur; y++) {
+    for (x = 0; x < largeur; x += 3) {
+      pixels[y * (largeur + padding) + x] = 0;
+      pixels[y * (largeur + padding) + x + 1] = 0;
+    }
+  }
+}
+
+void negatif(entete_bmp *entete, unsigned char *pixels)
+{
+    int largeur = entete->bitmap.largeur * 3;
+  int hauteur = entete->bitmap.hauteur;
+  int padding = 4 - largeur % 4;
+  int y;
+  int x;
+  for (y = 0; y < hauteur; y++) 
+  {
+    for (x = 0; x < largeur; x++) 
+    {
+      pixels[y * (largeur + padding) + x] = 255 - pixels[y * (largeur + padding) + x];
+    }
+  }
+}
+
+void noir_et_blanc(entete_bmp *entete,unsigned char *pixels)
+{
+    int largeur = entete->bitmap.largeur * 3;
+  int hauteur = entete->bitmap.hauteur;
+  int padding = 4 - largeur % 4;
+  int y;
+  int x;
+  for (y = 0; y < hauteur; y++) 
+  {
+    for (x = 0; x < largeur; x += 3) 
+    {
+      int total = pixels[y * (largeur + padding) + x] + pixels[y * (largeur + padding) + x + 1] + pixels[y * (largeur + padding) + x + 2];
+      pixels[y * (largeur + padding) + x] = total / 3;
+      pixels[y * (largeur + padding) + x + 1] = total / 3;
+      pixels[y * (largeur + padding) + x + 2] = total / 3;
+    }
+  }
+}
+
+void moitie(entete_bmp *entete, unsigned char *pixels, int sup)
+{
+   int hauteur = ( entete -> bitmap).hauteur ;
+  int largeur = ( entete -> bitmap).largeur ;
+  int demi = (hauteur*largeur*3)/2;
+  int cpt = 1;
+
+  for(; cpt <= hauteur*largeur*3 ; cpt=cpt+1)
+  {
+    if( sup == 1 && cpt < demi )
+      *( pixels + cpt ) = 0 ;
+     else if( sup == 0 && cpt > demi )
+      *( pixels + cpt ) = 0 ;
+  }
+}

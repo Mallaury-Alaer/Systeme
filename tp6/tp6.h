@@ -38,4 +38,10 @@ int ecrire_quatre_octets(int fd, uint32 *val);
 int ecrire_entete(int vers, entete_bmp *entete);
 int verifier_entete(entete_bmp *entete);
 unsigned char* allouer_pixels(entete_bmp *entete);
-
+int lire_pixels(int de, entete_bmp *entete, unsigned char *pixels);
+int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels);
+int copier_bmp(int de, int vers);
+void rouge(entete_bmp *entete, unsigned char *pixels);
+void negatif(entete_bmp *entete, unsigned char *pixels);
+void noir_et_blanc(entete_bmp *entete,unsigned char *pixels);
+void moitie(entete_bmp *entete, unsigned char *pixels, int sup);
