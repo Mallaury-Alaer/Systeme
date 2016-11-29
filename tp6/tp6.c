@@ -94,17 +94,25 @@ int verifier_entete(entete_bmp *entete)
 
 unsigned char* allouer_pixels(entete_bmp *entete)
 {
-  return malloc((entete->bitmap.largeur * entete->bitmap.hauteur * 3));
+  long taille = entete->bitmap.taille_donnees_image;
+  unsigned char* res = malloc(sizeof(char)*taille);
+  return res;
 }
 
 int lire_pixels(int de, entete_bmp *entete, unsigned char *pixels)
 {
-  return read(de, pixels, entete->bitmap.largeur * entete->bitmap.hauteur * 3);
+  int res;
+  lseek(de, entete->fichier.offset_donnees, SEEK_SET);
+  res = read(de, pixels, entete->bitmap.taille_donnees_image);
+  return res;
 }
 
 int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels)
 {
-  return write(vers, pixels, entete->bitmap.largeur * entete->bitmap.hauteur * 3);
+  int res;
+  lseek(vers, entete->fichier.offset_donnees, SEEK_SET);
+  res = write(vers, pixels, entete->bitmap.taille_donnees_image);
+  return res; 
 }
 
 
@@ -123,7 +131,7 @@ int copier_bmp(int de, int vers)
   free(pixels);
   return 1; /* on a réussi */
 }
-
+/*
 void rouge(entete_bmp *entete, unsigned char *pixels)
 {
   int largeur = entete->bitmap.largeur * 3;
@@ -137,6 +145,7 @@ void rouge(entete_bmp *entete, unsigned char *pixels)
       pixels[y * (largeur + padding) + x + 1] = 0;
     }
   }
+
 }
 
 void negatif(entete_bmp *entete, unsigned char *pixels)
@@ -173,19 +182,68 @@ void noir_et_blanc(entete_bmp *entete,unsigned char *pixels)
     }
   }
 }
+*/
+
+int taille_ligne(const entete_bmp *entete){
+  int taille = (entete->bitmap.largeur) * 3;
+  int bourrage = 0;
+  if (taille % 4 != 0){
+    bourrage = 4 - (taille % 4);
+  }
+  return taille + bourrage;
+}
+
+int taille_image(const entete_bmp *entete){
+  return entete->bitmap.hauteur * taille_ligne(entete);
+}
+
+void rouge(entete_bmp *entete, unsigned char *pixels){
+  
+  int y;
+  int x;
+  int hauteur = entete->bitmap.hauteur;
+  int largeur = entete->bitmap.largeur;
+  int taille_ligne = largeur*3;
+  while(taille_ligne%4 !=0) taille_ligne++; 
+
+  for(y=0; y<hauteur;y++){
+    for(x=0;x<largeur;x++){
+      int ind = y*taille_ligne + x*3;
+      pixels[ind]=0;
+      pixels[ind+1]=0;
+    }
+  }
+}
+
+void negatif(entete_bmp *entete, unsigned char *pixels){
+ unsigned int i = 0;
+
+  for (i = 0; i < (entete->bitmap.taille_donnees_image) ;i++)
+    pixels[i] = ~pixels[i];
+}
+
+
+void noir_et_blanc(entete_bmp *entete, unsigned char *pixels){
+  unsigned int i=0;
+  for (i = 0; i < (entete->bitmap.taille_donnees_image)-3 ;i+=3){
+    int m = (pixels[i]+pixels[i+1]+pixels[i+2])/3;
+    pixels[i] = m;
+    pixels[i+1] = m;
+    pixels[i+2] = m;
+  }
+}
 
 void moitie(entete_bmp *entete, unsigned char *pixels, int sup)
 {
-   int hauteur = ( entete -> bitmap).hauteur ;
-  int largeur = ( entete -> bitmap).largeur ;
-  int demi = (hauteur*largeur*3)/2;
-  int cpt = 1;
-
-  for(; cpt <= hauteur*largeur*3 ; cpt=cpt+1)
+  unsigned  int i;
+  entete->bitmap.hauteur=entete->bitmap.hauteur/2;
+  entete->bitmap.taille_donnees_image=entete->bitmap.taille_donnees_image/2;
+  entete->fichier.taille_fichier=entete->fichier.taille_fichier-entete->bitmap.taille_donnees_image;
+  if(sup==1)
+    {
+      for( i=0;i<(entete->bitmap.taille_donnees_image);i++)  
   {
-    if( sup == 1 && cpt < demi )
-      *( pixels + cpt ) = 0 ;
-     else if( sup == 0 && cpt > demi )
-      *( pixels + cpt ) = 0 ;
+    pixels[i]=pixels[i+entete->bitmap.taille_donnees_image];
   }
+      }
 }

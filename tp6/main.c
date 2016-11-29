@@ -9,9 +9,16 @@
 
 int main(int argc,char *argv[])
 {
+  
+  if(argc<4)
+    {
+      printf("Erreur nb arguments\n");
+      return 1;
+    }
+    
  
-  int input = open("test24-pad1.bmp", O_RDONLY);
-  int output = open("test_out.bmp", O_WRONLY | O_CREAT | O_TRUNC, 0666);
+  int input = open(argv[argc-2], O_RDONLY);
+  int output = open(argv[argc-1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
   if (input != -1 && output != -1) {
     entete_bmp entete;
     unsigned char *pixels;
@@ -24,7 +31,7 @@ int main(int argc,char *argv[])
     if (argc > 1) {
 
       int i;
-      for (i = 1; i < argc; i++) { 
+      for (i = 1; i < (argc-2); i++) { 
 
   if (argv[i][0] == '-') { 
     unsigned int j;
@@ -67,4 +74,3 @@ int main(int argc,char *argv[])
   }
   return 1;
 }
-
