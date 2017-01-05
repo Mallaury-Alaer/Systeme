@@ -138,48 +138,6 @@ int lance_commande(int in, int out, char * com, char ** argv)
 	return pid;		
 }
 
-void stoppe_commande(int * pid, int nb)
-{
-	int i;
-	//<printf("fonction stop commande!\n");
-	for (i=0; i<nb; i+=1) {
-		kill(pid[i], SIGSTOP);
-	}
-}
-
-
-void shell()
-{
-	printf("*** iutsh ***\n");
-	while (1){
-		affiche_prompt();
-		execute_ligne_commande();
-	}
-}
-
-void traitement(int sig)
-{
-	if (sig == SIGCHLD){
-		waitpid(0, NULL, WNOHANG);
-	}
-	if (sig == SIGTSTP){
-		stoppe_commande(pids, nbpids);
-		waitpid(0, NULL, WNOHANG);
-		printf("No signal\n");
-		shell();
-	}
-}
-
-void redirection()
-{
-	struct sigaction action;
-	action.sa_handler = traitement;
-	action.sa_flags = SA_RESTART;
-	if (sigfillset(&action.sa_mask) == -1) return;
-	sigaction(SIGCHLD, &action, NULL);
-	sigaction(SIGTSTP, &action, NULL);
-}
-
 int main()
 {
 	/* initialisation */
@@ -187,8 +145,11 @@ int main()
 	nbpile = 0;
 	nbpids = 0;
 
-	redirection();
-	shell();
+	printf("*** iutsh ***\n");
+	while (1){
+		affiche_prompt();
+		execute_ligne_commande();
+	}
 
 	return 0;
 }
